@@ -39,7 +39,5 @@ build/
 .DS_Store
 
 ### Project-specific ###
-test-output/
 claude-old-session/
 src/test/resources/config.properties
-.claude/
