@@ -42,3 +42,4 @@ build/
 test-output/
 claude-old-session/
 src/test/resources/config.properties
+.claude/
