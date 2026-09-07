@@ -22,7 +22,7 @@ public class TC_LOGIN_01 extends BaseTest {
 
     @Test
     @Order(1)
-    @DisplayName("Step 1: Navigate to https://www.saucedemo.com/</br>")
+    @DisplayName("Step 1: Navigate to https://www.saucedemo.com/")
     public void navigateToSauceDemo() {
         loginPage.goToSauceDemoPage();
     }
