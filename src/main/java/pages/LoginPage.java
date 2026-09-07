@@ -5,8 +5,6 @@ import com.microsoft.playwright.Page;
 import utils.ConfigReader;
 import utils.LogUtil;
 
-import java.util.List;
-
 public class LoginPage extends BasePage {
     private final Locator loginLogo = page.locator("//div[@class='login_logo']");
     private final Locator usernameInput = page.locator("//input[@data-test='username']");
@@ -15,6 +13,7 @@ public class LoginPage extends BasePage {
     private final Locator accountList = page.locator("//div[@data-test='login-credentials']");
     private final Locator passwordList = page.locator("//div[@data-test='login-password']");
     private final Locator loginBox = page.locator("//div[@class='login-box']");
+    private final Locator errorMessage = page.locator("//div[@class = 'error-message-container error']");
 
     public LoginPage(Page page){
         super(page);
@@ -129,6 +128,21 @@ public class LoginPage extends BasePage {
     public double getLoginButtonPositionY() {
         LogUtil.info("Login button position: " + getElementYPosition(loginButton));
         return getElementYPosition(loginButton);
+    }
+
+    public String getErrorMessageContent() {
+        LogUtil.info("Error message: " + getInnerText(errorMessage));
+        return getInnerText(errorMessage);
+    }
+
+    public String getUsernameBorderColorCode(){
+        LogUtil.info("Color code for Username border: " + getCssValue(usernameInput, "border-bottom-color"));
+        return getCssValue(usernameInput, "border-bottom-color");
+    }
+
+    public String getPasswordBorderColorCode(){
+        LogUtil.info("Color code for Password border: " + getCssValue(passwordInput, "border-bottom-color"));
+        return getCssValue(passwordInput, "border-bottom-color");
     }
 
 }
