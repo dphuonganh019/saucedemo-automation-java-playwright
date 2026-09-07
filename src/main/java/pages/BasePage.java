@@ -92,4 +92,11 @@ abstract class BasePage {
         waitElementVisible(locator);
         return locator.boundingBox().y;
     }
+
+    protected String getCssValue(Locator locator, String cssProperty) {
+        waitElementVisible(locator);
+        return (String) locator.evaluate(
+                "(el, prop) => window.getComputedStyle(el).getPropertyValue(prop)", cssProperty
+        );
+    }
 }
