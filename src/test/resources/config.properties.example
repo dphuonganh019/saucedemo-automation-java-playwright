@@ -1,0 +1,12 @@
+# Copy this file to "config.properties" (same folder) and fill in real values.
+# "config.properties" is git-ignored on purpose — never commit real values.
+baseUrl=https://www.saucedemo.com/
+headless=false
+username_standard_user=CHANGE_ME
+username_invalid_user=CHANGE_ME
+username_locked_out_user=CHANGE_ME
+username_problem_user=CHANGE_ME
+username_performance_glitch_user=CHANGE_ME
+
+# password for all users
+password=CHANGE_ME
