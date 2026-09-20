@@ -31,7 +31,7 @@ public class TC_LOGIN_10 extends BaseTest{
     private final static List<String> EXPECTED_PASSWORD_LIST = List.of("secret_sauce");
     @BeforeAll
     static void setupPrecondition(){
-        loginPage = new LoginPage(page);
+        loginPage = new LoginPage(page());
         loginPage.goToSauceDemoPage();
     }
     @Test
