@@ -21,7 +21,7 @@ public class TC_LOGIN_02 extends BaseTest {
 
     @BeforeAll
     static void setup() {
-        loginPage = new LoginPage(page);
+        loginPage = new LoginPage(page());
     }
 
     @Test
@@ -61,7 +61,7 @@ public class TC_LOGIN_02 extends BaseTest {
     public void verifyLoginFailureResults() {
         assertAll(
                 () -> {
-                    final String actualUrl = browserManager.getCurrentTabUrl();
+                    final String actualUrl = browserManager().getCurrentTabUrl();
                     assertEquals(
                             EXPECTED_URL,
                             actualUrl,
