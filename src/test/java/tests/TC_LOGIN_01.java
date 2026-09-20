@@ -17,7 +17,7 @@ public class TC_LOGIN_01 extends BaseTest {
 
     @BeforeAll
     static void setup() {
-        loginPage = new LoginPage(page);
+        loginPage = new LoginPage(page());
     }
 
     @Test
@@ -52,7 +52,7 @@ public class TC_LOGIN_01 extends BaseTest {
     @Order(5)
     @DisplayName("Expected Result: System redirects to https://www.saucedemo.com/inventory.html")
     public void verifyLoginSuccessfully() {
-        final String actualUrl = browserManager.getCurrentTabUrl();
+        final String actualUrl = browserManager().getCurrentTabUrl();
         assertEquals(
                 EXPECTED_URL_AFTER_LOGIN,
                 actualUrl,
