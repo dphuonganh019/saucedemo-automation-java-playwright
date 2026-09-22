@@ -1,6 +1,6 @@
 # SauceDemo Test Automation Framework
 
-![CI](https://github.com/dphuonganh019/PHUONGANH_CAPSTONE_AUTOTEST_JAVA_PLAYWRIGHT/actions/workflows/ci.yml/badge.svg)
+![CI](https://github.com/dphuonganh019/saucedemo-automation-java-playwright/actions/workflows/ci.yml/badge.svg)
 
 A UI test automation framework built from scratch for [saucedemo.com](https://www.saucedemo.com/), covering the login flow with a Page Object Model design, parallel/sequential test execution, and automated HTML reporting. Built as a capstone project to practice designing an automation framework end-to-end rather than just writing individual test scripts.
 
@@ -39,8 +39,8 @@ Each `TC_LOGIN_*` class manages its own isolated `ThreadLocal` browser/page via 
 
 1. Clone the repo and install dependencies:
    ```bash
-   git clone https://github.com/dphuonganh019/PHUONGANH_CAPSTONE_AUTOTEST_JAVA_PLAYWRIGHT.git
-   cd PHUONGANH_CAPSTONE_AUTOTEST_JAVA_PLAYWRIGHT
+   git clone https://github.com/dphuonganh019/saucedemo-automation-java-playwright.git
+   cd saucedemo-automation-java-playwright
    mvn install
    ```
 2. Install the Playwright browsers:
