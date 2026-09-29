@@ -38,3 +38,5 @@ build/
 ### Project-specific ###
 test-output/
 src/test/resources/config.properties
+scripts/.env
+scripts/__pycache__/
