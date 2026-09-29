@@ -39,7 +39,9 @@ public class ExtentReportExtension implements BeforeEachCallback, TestWatcher {
     @Override
     public void testFailed(ExtensionContext context, Throwable cause) {
         ExtentTest test = getTest(context);
-        LogUtil.captureFailureScreenshot();
+        String testName = context.getRequiredTestClass().getSimpleName()
+                + "_" + context.getRequiredTestMethod().getName();
+        LogUtil.captureFailureScreenshot(testName);
         if (cause instanceof MultipleFailuresError multipleFailuresError) {
             for (Throwable failure : multipleFailuresError.getFailures()) {
                 test.log(Status.FAIL, escapeHtml(failure.getMessage()));
