@@ -64,3 +64,9 @@ Tests run headless in CI; locally, set `headless=false` in `config.properties` t
 ## Reporting
 
 Each run generates an ExtentReports HTML report under `test-output/`, including step-by-step logs and failure screenshots. On every push/PR, GitHub Actions runs the suite headless and uploads the report as a workflow artifact — see the **Actions** tab.
+
+## AI-assisted bug reporting
+
+When a test fails in CI, `scripts/report_failures.py` parses the Surefire XML results and sends each failure (test class/method, error message, stack trace) to **Claude (Anthropic API)**. Claude drafts a structured bug report — written as manual QA reproduction steps rather than a description of the automated script — and the script files it straight to JIRA via the REST API, with the matching failure screenshot attached and `Severity`/`Priority` set from Claude's assessment.
+
+This only runs in CI (on real, pushed failures), not on local test runs, to avoid filing bugs for work-in-progress code. See `scripts/report_failures.py` and the `File JIRA bug reports for failed tests` step in `.github/workflows/ci.yml`.
