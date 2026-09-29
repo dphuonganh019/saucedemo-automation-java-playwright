@@ -39,6 +39,26 @@ jobs:
       - name: Run tests (headless)
         run: mvn test -Dheadless=true
 
+      - name: Set up Python
+        if: failure()
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install bug-reporter dependencies
+        if: failure()
+        run: pip install -r scripts/requirements.txt
+
+      - name: File JIRA bug reports for failed tests
+        if: failure()
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
+          JIRA_EMAIL: ${{ secrets.JIRA_EMAIL }}
+          JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
+          JIRA_PROJECT_KEY: ${{ secrets.JIRA_PROJECT_KEY }}
+        run: python scripts/report_failures.py
+
       - name: Upload ExtentReports report
         if: always()
         uses: actions/upload-artifact@v4
