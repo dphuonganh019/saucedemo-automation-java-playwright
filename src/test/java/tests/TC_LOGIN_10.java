@@ -15,7 +15,7 @@ public class TC_LOGIN_10 extends BaseTest{
 
     private final static String EXPECTED_USERNAME_PLACEHOLDER = "Username";
     private final static String EXPECTED_PASSWORD_PLACEHOLDER = "Password";
-    private final static String LOGIN_BTN_TXT = "Login HEHE";
+    private final static String LOGIN_BTN_TXT = "Login";
     private final static String EXPECTED_HEADER_ACCOUNT_LIST = "Accepted usernames are:";
     private final static String EXPECTED_HEADER_PASSWORD_LIST = "Password for all users:";
     private final static List<String> EXPECTED_ACCOUNT_LIST = List.of(
