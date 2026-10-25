@@ -94,6 +94,10 @@ public class LoginPage extends BasePage {
         clickElement(loginButton);
     }
 
+    public void clickLoginButton(int timeoutMs) {
+        clickElement(loginButton, timeoutMs);
+    }
+
     public String getListAccount() {
         LogUtil.info("List account text: " + getInnerText(accountList));
         return getInnerText(accountList);
