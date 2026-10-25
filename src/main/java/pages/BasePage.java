@@ -19,9 +19,19 @@ abstract class BasePage {
         locator.waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.VISIBLE));
     }
 
+    private void waitElementVisible(Locator locator, int timeoutMs){
+        locator.waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.VISIBLE).setTimeout(timeoutMs));
+    }
+
     protected void clickElement(Locator locator) {
         waitElementVisible(locator);
         locator.click();
+    }
+
+    // Overload dùng cho các trường hợp cần chờ lâu hơn timeout mặc định (vd: performance_glitch_user)
+    protected void clickElement(Locator locator, int timeoutMs) {
+        waitElementVisible(locator, timeoutMs);
+        locator.click(new Locator.ClickOptions().setTimeout(timeoutMs));
     }
 
     protected void fillText(Locator locator, String text){
