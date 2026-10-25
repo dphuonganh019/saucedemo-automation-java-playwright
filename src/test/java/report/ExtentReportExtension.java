@@ -19,9 +19,7 @@ public class ExtentReportExtension implements BeforeEachCallback, TestWatcher {
 
     @Override
     public void beforeEach(ExtensionContext context) {
-        String testCaseName = context.getParent()
-                .map(ExtensionContext::getDisplayName)
-                .orElse(context.getRequiredTestClass().getSimpleName());
+        String testCaseName = resolveTestCaseName(context);
 
         ExtentTest testCase = testCaseMap.computeIfAbsent(testCaseName, extent::createTest);
         ExtentTest step = testCase.createNode(context.getDisplayName());
@@ -56,6 +54,17 @@ public class ExtentReportExtension implements BeforeEachCallback, TestWatcher {
     public void testAborted(ExtensionContext context, Throwable cause) {
         getTest(context).log(Status.SKIP, "Blocked: " + escapeHtml(cause.getMessage()));
         LogUtil.clear();
+    }
+
+    // Với @Test thường, parent của step là context của class. Nhưng với @ParameterizedTest,
+    // parent của mỗi lần chạy là context của method template, nên phải đi ngược lên tới
+    // context không còn gắn với method nào (tức là class) để lấy đúng tên testcase.
+    private String resolveTestCaseName(ExtensionContext context) {
+        ExtensionContext current = context;
+        while (current.getTestMethod().isPresent() && current.getParent().isPresent()) {
+            current = current.getParent().get();
+        }
+        return current.getDisplayName();
     }
 
     private ExtentTest getTest(ExtensionContext context) {
