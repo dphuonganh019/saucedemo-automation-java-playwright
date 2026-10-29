@@ -8,13 +8,15 @@ import utils.LogUtil;
 import java.util.List;
 
 public class InventoryPage extends BasePage {
-    private final Locator productCards = page.locator("//div[@data-test='inventory-item']");
-    private final Locator productNames = page.locator("//div[@data-test='inventory-item-name']");
-    private final Locator productPrices = page.locator("//div[@data-test='inventory-item-price']");
+    // Cart, Checkout Overview, Product Detail cũng dùng data-test='inventory-item' -> lấy theo class inventory_item
+    // để không bắt nhầm item của trang trước trong lúc đang chuyển trang
+    private final Locator productCards = page.locator("//div[@class='inventory_item']");
+    private final Locator productNames = page.locator("//div[@class='inventory_item']//div[@data-test='inventory-item-name']");
+    private final Locator productPrices = page.locator("//div[@class='inventory_item']//div[@data-test='inventory-item-price']");
     private final Locator sortDropdown = page.locator("//select[@data-test='product-sort-container']");
     private final Locator sortOptions = page.locator("//select[@data-test='product-sort-container']/option");
     private final Locator activeSortOption = page.locator("//span[@data-test='active-option']");
-    private final Locator productButtons = page.locator("//div[@data-test='inventory-item']//button");
+    private final Locator productButtons = page.locator("//div[@class='inventory_item']//button");
 
     public InventoryPage(Page page) {
         super(page);
@@ -34,7 +36,7 @@ public class InventoryPage extends BasePage {
     // Tìm product card theo tên sản phẩm, các locator con bên dưới đều tìm trong phạm vi card này (bắt đầu bằng .//)
     // Playwright chỉ tự nhận XPath khi chuỗi bắt đầu bằng // -> XPath tương đối .// phải thêm tiền tố "xpath="
     private Locator getProductCard(String productName) {
-        return page.locator("//div[@data-test='inventory-item'][.//div[@data-test='inventory-item-name' and text()='"
+        return page.locator("//div[@class='inventory_item'][.//div[@data-test='inventory-item-name' and text()='"
                 + productName + "']]");
     }
 
