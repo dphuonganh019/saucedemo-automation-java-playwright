@@ -27,11 +27,11 @@ src/
     ├── report/         # ExtentReports setup (ReportManager, ExtentReportExtension)
     └── tests/
         ├── BaseTest.java              # ThreadLocal-based Playwright browser/page lifecycle
-        ├── TC_LOGIN_*.java            # Individual test cases
-        └── EndToEndSystemTestSuite.java  # Suite that runs the TC_LOGIN_* classes together
+        ├── login/                     # TC_LOGIN_* test cases (one class = one manual testcase)
+        └── suites/                    # RegressionSuite (all modules) + one suite per module (LoginSuite, ...)
 ```
 
-Each `TC_LOGIN_*` class manages its own isolated `ThreadLocal` browser/page via `BaseTest`, so test classes have no dependency on each other and can run concurrently under `@ParallelSuite`.
+Each `TC_*` class manages its own isolated `ThreadLocal` browser/page via `BaseTest`, so test classes have no dependency on each other and can run concurrently under `@ParallelSuite`.
 
 ## Getting started
 
@@ -59,7 +59,7 @@ Each `TC_LOGIN_*` class manages its own isolated `ThreadLocal` browser/page via 
 mvn test
 ```
 
-Tests run headless in CI; locally, set `headless=false` in `config.properties` to watch the browser. Surefire is configured to discover `*Suite.java` classes only — run a suite (e.g. `EndToEndSystemTestSuite`), not individual `TC_*` classes directly.
+Tests run headless in CI; locally, set `headless=false` in `config.properties` to watch the browser. `mvn test` runs `RegressionSuite` (every `TC_*` class under `tests`). To run a single module, pass its suite: `mvn test -Dtest=LoginSuite`.
 
 ## Reporting
 
