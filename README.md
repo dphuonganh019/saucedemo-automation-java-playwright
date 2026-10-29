@@ -20,15 +20,16 @@ A UI test automation framework built from scratch for [saucedemo.com](https://ww
 ```
 src/
 ├── main/java/
-│   ├── pages/          # Page Object classes (BasePage, LoginPage, ...)
+│   ├── pages/          # Page Objects (BasePage, LoginPage, InventoryPage, CartPage, Checkout*Page, ...) + HeaderComponent / SideMenuComponent
 │   └── utils/          # ConfigReader, BrowserManager, LogUtil
 └── test/java/
     ├── config/         # @FlowSuite / @ParallelSuite execution mode annotations
     ├── report/         # ExtentReports setup (ReportManager, ExtentReportExtension)
     └── tests/
         ├── BaseTest.java              # ThreadLocal-based Playwright browser/page lifecycle
-        ├── login/                     # TC_LOGIN_* test cases (one class = one manual testcase)
-        └── suites/                    # RegressionSuite (all modules) + one suite per module (LoginSuite, ...)
+        ├── login/ menu/ inventory/ productdetail/ cart/ checkout/ e2e/
+        │                              # TC_* test cases per module (one class = one manual testcase)
+        └── suites/                    # RegressionSuite (all modules) + one suite per module (LoginSuite, CartSuite, E2ESuite, ...)
 ```
 
 Each `TC_*` class manages its own isolated `ThreadLocal` browser/page via `BaseTest`, so test classes have no dependency on each other and can run concurrently under `@ParallelSuite`.
