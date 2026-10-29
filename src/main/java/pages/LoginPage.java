@@ -13,7 +13,8 @@ public class LoginPage extends BasePage {
     private final Locator accountList = page.locator("//div[@data-test='login-credentials']");
     private final Locator passwordList = page.locator("//div[@data-test='login-password']");
     private final Locator loginBox = page.locator("//div[@class='login-box']");
-    private final Locator errorMessage = page.locator("//div[@class = 'error-message-container error']");
+    private final Locator errorMessage = page.locator("//h3[@data-test='error']");
+    private final Locator errorCloseButton = page.locator("//button[@data-test='error-button']");
 
     public LoginPage(Page page){
         super(page);
@@ -52,8 +53,8 @@ public class LoginPage extends BasePage {
     }
 
     public String getPasswordInputValue() {
-        LogUtil.info("Current input value: " + getAttributeValue(usernameInput));
-        return getAttributeValue(usernameInput);
+        LogUtil.info("Current input value: " + getAttributeValue(passwordInput));
+        return getAttributeValue(passwordInput);
     }
 
     public boolean isPasswordInputVisible() {
@@ -96,6 +97,26 @@ public class LoginPage extends BasePage {
 
     public void clickLoginButton(int timeoutMs) {
         clickElement(loginButton, timeoutMs);
+    }
+
+    // Dùng cho Precondition "User is logged in" của các module sau màn Login
+    public void loginAs(String username, String password) {
+        LogUtil.info("Login with username: " + username);
+        fillText(usernameInput, username);
+        fillText(passwordInput, password);
+        clickElement(loginButton);
+    }
+
+    public boolean isErrorMessageVisible() {
+        return isElementVisible(errorMessage);
+    }
+
+    public boolean isErrorMessageHidden() {
+        return isElementHidden(errorMessage);
+    }
+
+    public void clickErrorCloseButton() {
+        clickElement(errorCloseButton);
     }
 
     public String getListAccount() {
