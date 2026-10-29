@@ -2,6 +2,7 @@ package pages;
 
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
+import utils.ConfigReader;
 import utils.LogUtil;
 
 import java.util.List;
@@ -13,9 +14,21 @@ public class InventoryPage extends BasePage {
     private final Locator sortDropdown = page.locator("//select[@data-test='product-sort-container']");
     private final Locator sortOptions = page.locator("//select[@data-test='product-sort-container']/option");
     private final Locator activeSortOption = page.locator("//span[@data-test='active-option']");
+    private final Locator productButtons = page.locator("//div[@data-test='inventory-item']//button");
 
     public InventoryPage(Page page) {
         super(page);
+    }
+
+    // Truy cập thẳng URL inventory.html (dùng cho case chưa login mà vào thẳng trang trong)
+    public void goToInventoryPageByUrl() {
+        navigateToUrl(ConfigReader.get("baseUrl") + "inventory.html");
+    }
+
+    public List<String> getAllProductButtonTexts() {
+        final List<String> buttonTexts = getListInnerText(productButtons);
+        LogUtil.info("Product buttons: " + buttonTexts);
+        return buttonTexts;
     }
 
     // Tìm product card theo tên sản phẩm, các locator con bên dưới đều tìm trong phạm vi card này (bắt đầu bằng .//)
