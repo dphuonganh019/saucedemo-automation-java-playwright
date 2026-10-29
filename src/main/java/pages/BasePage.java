@@ -68,6 +68,17 @@ abstract class BasePage {
         }
     }
 
+    // Ngược lại với isElementVisible: chờ element biến mất (hidden hoặc bị xoá khỏi DOM),
+    // hết timeout mà vẫn còn hiển thị thì trả false
+    protected boolean isElementHidden(Locator locator) {
+        try {
+            locator.waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.HIDDEN));
+            return true;
+        } catch (PlaywrightException e) {
+            return false;
+        }
+    }
+
     protected boolean isElementEnabled(Locator locator) {
         try {
             waitElementVisible(locator);
