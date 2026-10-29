@@ -1,10 +1,11 @@
-package tests;
+package tests.login;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import pages.LoginPage;
+import tests.BaseTest;
 import utils.ConfigReader;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
