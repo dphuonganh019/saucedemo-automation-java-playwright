@@ -115,6 +115,12 @@ abstract class BasePage {
         return locator.boundingBox().y;
     }
 
+    protected double getElementXPosition(Locator locator)
+    {
+        waitElementVisible(locator);
+        return locator.boundingBox().x;
+    }
+
     protected String getCssValue(Locator locator, String cssProperty) {
         waitElementVisible(locator);
         return (String) locator.evaluate(
