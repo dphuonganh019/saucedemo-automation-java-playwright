@@ -57,7 +57,7 @@
                 <version>3.5.2</version>
                 <configuration>
                     <includes>
-                        <include>**/*Suite.java</include>
+                        <include>**/RegressionSuite.java</include>
                     </includes>
                 </configuration>
             </plugin>
