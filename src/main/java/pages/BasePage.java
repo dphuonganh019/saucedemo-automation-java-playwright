@@ -149,9 +149,18 @@ abstract class BasePage {
         return locator.count();
     }
 
-    // Ảnh bị broken thì naturalWidth = 0
+    // Ảnh bị broken thì naturalWidth = 0. Ảnh chưa tải xong (img.complete = false) thì chờ event load/error,
+    // tối đa 5s, để không kết luận nhầm là broken khi mạng chậm / nhiều browser chạy song song
     protected boolean isImageLoaded(Locator locator) {
         waitElementVisible(locator);
-        return (Boolean) locator.evaluate("img => img.complete && img.naturalWidth > 0");
+        return (Boolean) locator.evaluate("""
+                img => img.complete
+                    ? img.naturalWidth > 0
+                    : new Promise(resolve => {
+                        img.addEventListener('load', () => resolve(img.naturalWidth > 0));
+                        img.addEventListener('error', () => resolve(false));
+                        setTimeout(() => resolve(img.complete && img.naturalWidth > 0), 5000);
+                    })
+                """);
     }
 }
