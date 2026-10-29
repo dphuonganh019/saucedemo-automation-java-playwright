@@ -1,15 +1,16 @@
-package tests;
+package tests.login;
 
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.*;
 import pages.LoginPage;
+import tests.BaseTest;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@DisplayName("TC_LOGIN_10: Detailed UI verification of the Login screen")
-public class TC_LOGIN_10 extends BaseTest{
+@DisplayName("TC_LOGIN_06: Detailed UI verification of the Login screen")
+public class TC_LOGIN_06 extends BaseTest {
 
     static LoginPage loginPage;
 
