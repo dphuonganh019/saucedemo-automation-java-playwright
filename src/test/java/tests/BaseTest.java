@@ -21,7 +21,7 @@ public class BaseTest {
     static ThreadLocal<BrowserManager> browserManagerTL = new ThreadLocal<>();
 
     @BeforeAll
-    static void launchBrowser() {
+    protected static void launchBrowser() {
         Playwright pw = Playwright.create();
         Browser br = pw.chromium().launch(
                 new BrowserType.LaunchOptions().setHeadless(ConfigReader.getBoolean("headless")));
@@ -29,6 +29,8 @@ public class BaseTest {
         Page page = ctx.newPage();
 
         page.setDefaultTimeout(5000);
+        // Khi nhiều class chạy song song, page.navigate thỉnh thoảng vượt 5s -> tách riêng timeout cho navigation
+        page.setDefaultNavigationTimeout(15000);
 
         playwrightTL.set(pw);
         browserTL.set(br);
@@ -39,15 +41,15 @@ public class BaseTest {
     }
 
     @AfterAll
-    static void closeBrowser() {
+    protected static void closeBrowser() {
         LogUtil.clearPage();
         contextTL.get().close();
         browserTL.get().close();
         playwrightTL.get().close();
     }
 
-    static Page page() { return pageTL.get(); }
-    static Browser browser() { return browserTL.get(); }
-    static BrowserContext context() { return contextTL.get(); }
-    static BrowserManager browserManager() { return browserManagerTL.get(); }
+    protected static Page page() { return pageTL.get(); }
+    protected static Browser browser() { return browserTL.get(); }
+    protected static BrowserContext context() { return contextTL.get(); }
+    protected static BrowserManager browserManager() { return browserManagerTL.get(); }
 }
