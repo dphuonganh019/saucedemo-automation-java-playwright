@@ -98,13 +98,14 @@ abstract class BasePage {
         return locator.getAttribute("value");
     }
 
+    // Locator trỏ tới nhiều element -> chỉ chờ element đầu tiên, vì waitFor() trên nhiều element sẽ vi phạm strict mode
     protected List<String> getListInnerText(Locator locator){
-        waitElementVisible(locator);
+        waitElementVisible(locator.first());
         return locator.allInnerTexts();
     }
 
     protected List<String> getListTextContent(Locator locator){
-        waitElementVisible(locator);
+        waitElementVisible(locator.first());
         return locator.allTextContents();
     }
 
@@ -119,5 +120,32 @@ abstract class BasePage {
         return (String) locator.evaluate(
                 "(el, prop) => window.getComputedStyle(el).getPropertyValue(prop)", cssProperty
         );
+    }
+
+    protected String getAttribute(Locator locator, String attributeName) {
+        waitElementVisible(locator);
+        return locator.getAttribute(attributeName);
+    }
+
+    protected void selectOptionByValue(Locator locator, String value) {
+        waitElementVisible(locator);
+        locator.selectOption(value);
+    }
+
+    // Đếm số element đang có trong DOM tại thời điểm gọi, không chờ (dùng để kiểm tra element KHÔNG tồn tại, vd: cart badge)
+    protected int getElementCount(Locator locator) {
+        return locator.count();
+    }
+
+    // Đếm số element sau khi chờ element đầu tiên hiển thị (dùng cho danh sách chắc chắn có dữ liệu, vd: product cards)
+    protected int getVisibleElementCount(Locator locator) {
+        waitElementVisible(locator.first());
+        return locator.count();
+    }
+
+    // Ảnh bị broken thì naturalWidth = 0
+    protected boolean isImageLoaded(Locator locator) {
+        waitElementVisible(locator);
+        return (Boolean) locator.evaluate("img => img.complete && img.naturalWidth > 0");
     }
 }
