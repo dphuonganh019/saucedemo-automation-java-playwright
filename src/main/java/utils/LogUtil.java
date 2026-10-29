@@ -35,7 +35,10 @@ public class LogUtil {
     }
 
     public static void info(String message) {
-        currentTest.get().log(Status.INFO, message);
+        ExtentTest test = currentTest.get();
+        // Gọi từ @BeforeAll (vd: precondition login) thì chưa có node step nào trong report -> bỏ qua log
+        if (test == null) return;
+        test.log(Status.INFO, message);
     }
 
     public static void screenshot(Page page, String stepName) {
