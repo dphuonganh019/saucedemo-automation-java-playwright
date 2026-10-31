@@ -1,6 +1,7 @@
 package tests.suites;
 
 import config.ParallelSuite;
+import org.junit.platform.suite.api.ExcludePackages;
 import org.junit.platform.suite.api.IncludeClassNamePatterns;
 import org.junit.platform.suite.api.SelectPackages;
 import org.junit.platform.suite.api.Suite;
@@ -12,6 +13,8 @@ import org.junit.platform.suite.api.SuiteDisplayName;
 @ParallelSuite
 @SuiteDisplayName("Regression Suite - All modules")
 @SelectPackages("tests")
+// tests.flow là các phase phụ thuộc nhau, không chạy song song được -> chạy riêng bằng UserJourneySuite (@FlowSuite)
+@ExcludePackages("tests.flow")
 @IncludeClassNamePatterns("^.*\\.TC_.*$")
 public class RegressionSuite {
 }
