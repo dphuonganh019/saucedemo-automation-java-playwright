@@ -58,6 +58,7 @@
                 <configuration>
                     <includes>
                         <include>**/RegressionSuite.java</include>
+                        <include>**/UserJourneySuite.java</include>
                     </includes>
                 </configuration>
             </plugin>
