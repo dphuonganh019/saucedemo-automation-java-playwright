@@ -29,10 +29,11 @@ src/
         ├── BaseTest.java              # ThreadLocal-based Playwright browser/page lifecycle
         ├── login/ menu/ inventory/ productdetail/ cart/ checkout/ e2e/
         │                              # TC_* test cases per module (one class = one manual testcase)
-        └── suites/                    # RegressionSuite (all modules) + one suite per module (LoginSuite, CartSuite, E2ESuite, ...)
+        ├── flow/                      # TC_FLOW_* user journey phases that hand a saved session to the next phase
+        └── suites/                    # RegressionSuite (all modules), UserJourneySuite (flow) + one suite per module
 ```
 
-Each `TC_*` class manages its own isolated `ThreadLocal` browser/page via `BaseTest`, so test classes have no dependency on each other and can run concurrently under `@ParallelSuite`.
+Each `TC_*` class manages its own isolated `ThreadLocal` browser/page via `BaseTest`, so test classes have no dependency on each other and can run concurrently under `@ParallelSuite`. The only exception is `tests/flow`, which is deliberately sequential (see below).
 
 ## Getting started
 
@@ -60,7 +61,24 @@ Each `TC_*` class manages its own isolated `ThreadLocal` browser/page via `BaseT
 mvn test
 ```
 
-Tests run headless in CI; locally, set `headless=false` in `config.properties` to watch the browser. `mvn test` runs `RegressionSuite` (every `TC_*` class under `tests`). To run a single module, pass its suite: `mvn test -Dtest=LoginSuite`.
+Tests run headless in CI; locally, set `headless=false` in `config.properties` to watch the browser. `mvn test` runs `RegressionSuite` (every module in parallel) followed by `UserJourneySuite` (the sequential flow). To run a single suite, pass its name: `mvn test -Dtest=LoginSuite`, `mvn test -Dtest=UserJourneySuite`.
+
+## Parallel vs sequential execution
+
+| Annotation | Behaviour | Used by |
+|---|---|---|
+| `@ParallelSuite` | Test classes run concurrently; the steps inside a class stay in `@Order` on one thread | `RegressionSuite` and the module suites |
+| `@FlowSuite` | Parallel disabled; test classes run one after another in class-level `@Order` | `UserJourneySuite` |
+
+`UserJourneySuite` models a returning customer across five phases. Each phase is its own `TC_FLOW_*` class running in a **fresh browser** that restores the session (cookies + local storage) saved by the previous phase via Playwright `storageState`:
+
+1. `TC_FLOW_01`: log in and save the session
+2. `TC_FLOW_02`: reopen the site without logging in, add two products
+3. `TC_FLOW_03`: restart the browser, the cart is still there
+4. `TC_FLOW_04`: check out the kept cart (item total, tax, total)
+5. `TC_FLOW_05`: log out, direct access to an internal page is denied
+
+Because every phase depends on the file written by the one before it, these classes cannot run in parallel. If they do, or if a phase fails to save its session, every step of the later phases is reported as **Skipped (Blocked)** instead of failing with misleading errors. For the same reason `RegressionSuite` excludes `tests.flow`.
 
 ## Reporting
 
@@ -68,6 +86,13 @@ Each run generates an ExtentReports HTML report under `test-output/`, including 
 
 ## AI-assisted bug reporting
 
-When a test fails in CI, `scripts/report_failures.py` parses the Surefire XML results and sends each failure (test class/method, error message, stack trace) to **Claude (Anthropic API)**. Claude drafts a structured bug report — written as manual QA reproduction steps rather than a description of the automated script — and the script files it straight to JIRA via the REST API, with the matching failure screenshot attached and `Severity`/`Priority` set from Claude's assessment.
+When a test fails in CI, `scripts/report_failures.py` splits the Surefire XML results into individual failed checks (one per failed expected result) and gives each a stable fingerprint. It then:
+
+- **groups by root cause**: one Claude (Anthropic API) call triages the new failed checks, so several test cases broken by the same defect become **one** JIRA bug listing every affected test case, while one test case with two unrelated failures becomes two bugs;
+- **avoids duplicates**: a check already tracked by an open bug only adds a "still failing" comment;
+- **handles regressions**: a check whose bug was closed reopens it (fix not released yet, or closed recently) or files a linked `[Regression]` bug, with fresh reproduction steps; bugs closed as Won't Fix / Not a Bug are never reopened;
+- **skips noise**: flaky or environment failures (timeouts, network) are listed in the run summary instead of being filed.
+
+Bugs are written as manual QA reproduction steps, carry the failure screenshots, and get `Severity`/`Priority` from the triage.
 
 This only runs in CI (on real, pushed failures), not on local test runs, to avoid filing bugs for work-in-progress code. See `scripts/report_failures.py` and the `File JIRA bug reports for failed tests` step in `.github/workflows/ci.yml`.
