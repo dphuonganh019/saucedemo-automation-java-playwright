@@ -63,7 +63,7 @@ A UI test automation framework built from scratch for [saucedemo.com](https://ww
         │       ├── login/ menu/ inventory/ productdetail/ cart/ checkout/ e2e/
         │       │                      # TC_* test cases, one class = one manual test case
         │       ├── flow/              # FlowBaseTest + TC_FLOW_* user journey phases
-        │       └── suites/            # RegressionSuite, UserJourneySuite and one suite per module
+        │       └── suites/            # RegressionSuite, UserJourneySuite, KnownBugSuite and one suite per module
         └── resources/
             ├── config.properties.example
             └── testdata/login_accounts.csv
@@ -97,7 +97,7 @@ Each `TC_*` class gets its own isolated `ThreadLocal` browser and page from `Bas
 mvn test
 ```
 
-`mvn test` runs `RegressionSuite` (every module in parallel) followed by `UserJourneySuite` (the sequential flow). To run a single suite, pass its name:
+`mvn test` runs `RegressionSuite` (every module in parallel), `UserJourneySuite` (the sequential flow) and `KnownBugSuite` (test cases that catch a known defect, see [Known issue](#known-issue)). To run a single suite, pass its name:
 
 ```bash
 mvn test -Dtest=LoginSuite
@@ -110,7 +110,7 @@ Any key in `config.properties` can be overridden from the command line, for exam
 
 | Annotation       | Behaviour                                                                             | Used by                                 |
 |------------------|---------------------------------------------------------------------------------------|-----------------------------------------|
-| `@ParallelSuite` | Test classes run concurrently; the steps inside a class stay in `@Order` on one thread | `RegressionSuite` and the module suites |
+| `@ParallelSuite` | Test classes run concurrently; the steps inside a class stay in `@Order` on one thread | `RegressionSuite`, `KnownBugSuite` and the module suites |
 | `@FlowSuite`     | Parallel disabled; test classes run one after another in class-level `@Order`          | `UserJourneySuite`                      |
 
 `UserJourneySuite` models a returning customer across five phases. Each phase is its own `TC_FLOW_*` class running in a **fresh browser** that restores the session (cookies + local storage) saved by the previous phase through Playwright `storageState`:
@@ -129,7 +129,13 @@ Each run generates an ExtentReports HTML report under `test-output/`: one node p
 
 ## Known issue
 
-`TC_MENU_05` and `TC_E2E_05` fail on purpose: they expose a real defect of saucedemo.com. After **Reset App State**, the cart badge is cleared but the product buttons keep showing **Remove** instead of **Add to cart**. The tests keep the correct expected result so the defect stays visible.
+`TC_MENU_05` and `TC_E2E_05` fail on purpose: they expose a real defect of saucedemo.com, tracked in JIRA as SDM-10. After **Reset App State**, the cart badge is cleared but the product buttons keep showing **Remove** instead of **Add to cart**. The tests keep the correct expected result so the defect stays visible.
+
+Both classes are tagged `@Tag("known-bug")` and quarantined:
+
+- `RegressionSuite` excludes the tag, so a defect that is already tracked does not turn every CI run red and does not hide new failures.
+- `KnownBugSuite` runs only the tagged classes. In CI it runs after the JIRA step and is allowed to fail, so the known defect still has a report on every run but never gets a new JIRA comment on every push.
+- If every known-bug test passes, CI shows a **Known bug may be fixed** warning: check the JIRA bug and remove the tag so the test case goes back to `RegressionSuite`.
 
 ## AI-assisted bug reporting
 
