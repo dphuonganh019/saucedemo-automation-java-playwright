@@ -40,23 +40,26 @@ jobs:
         run: mvn test -Dheadless=true
 
       - name: Set up Python
-        if: failure()
+        if: failure() && github.event_name == 'push'
         uses: actions/setup-python@v5
         with:
           python-version: '3.12'
 
       - name: Install bug-reporter dependencies
-        if: failure()
+        if: failure() && github.event_name == 'push'
         run: pip install -r scripts/requirements.txt
 
       - name: File JIRA bug reports for failed tests
-        if: failure()
+        if: failure() && github.event_name == 'push'
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           JIRA_BASE_URL: ${{ secrets.JIRA_BASE_URL }}
           JIRA_EMAIL: ${{ secrets.JIRA_EMAIL }}
           JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
           JIRA_PROJECT_KEY: ${{ secrets.JIRA_PROJECT_KEY }}
+          JIRA_REOPEN_TRANSITION: ${{ vars.JIRA_REOPEN_TRANSITION }}
+          REOPEN_WINDOW_DAYS: ${{ vars.REOPEN_WINDOW_DAYS }}
+          APP_VERSION: ${{ vars.APP_VERSION }}
         run: python scripts/report_failures.py
 
       - name: Upload ExtentReports report
