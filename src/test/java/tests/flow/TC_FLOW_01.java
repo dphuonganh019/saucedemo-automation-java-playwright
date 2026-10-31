@@ -22,7 +22,7 @@ public class TC_FLOW_01 extends FlowBaseTest {
 
     @BeforeAll
     static void setupPrecondition() {
-        clearSessions();
+        startJourney();
         loginPage = new LoginPage(page());
         header = new HeaderComponent(page());
         loginPage.goToSauceDemoPage();
