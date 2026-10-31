@@ -36,8 +36,10 @@ jobs:
           password=${{ secrets.SAUCE_PASSWORD }}
           EOF
 
+      # Known-bug test cases (KnownBugSuite) are left out here so a defect that is already tracked
+      # in JIRA does not turn every run red and does not hide new failures
       - name: Run tests (headless)
-        run: mvn test -Dheadless=true
+        run: mvn test -Dheadless=true -Dtest=RegressionSuite,UserJourneySuite
 
       - name: Set up Python
         if: failure() && github.event_name == 'push'
@@ -61,6 +63,18 @@ jobs:
           REOPEN_WINDOW_DAYS: ${{ vars.REOPEN_WINDOW_DAYS }}
           APP_VERSION: ${{ vars.APP_VERSION }}
         run: python scripts/report_failures.py
+
+      # Runs after the JIRA step on purpose: the bug reporter only sees the main test results,
+      # so known bugs never get a new comment on every push. A failure here does not fail the job
+      - name: Run known-bug tests (quarantined)
+        id: known_bugs
+        if: success() || failure()
+        continue-on-error: true
+        run: mvn test -Dheadless=true -Dtest=KnownBugSuite
+
+      - name: Flag known bugs that now pass
+        if: steps.known_bugs.outcome == 'success'
+        run: echo "::warning title=Known bug may be fixed::All @Tag(\"known-bug\") test cases passed. Check the linked JIRA bug and remove the tag so they run in RegressionSuite again."
 
       - name: Upload ExtentReports report
         if: always()
