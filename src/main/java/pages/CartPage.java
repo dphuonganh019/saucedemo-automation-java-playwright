@@ -2,6 +2,7 @@ package pages;
 
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
+import utils.ConfigReader;
 import utils.LogUtil;
 
 import java.util.List;
@@ -22,6 +23,11 @@ public class CartPage extends BasePage {
 
     public CartPage(Page page) {
         super(page);
+    }
+
+    // Truy cập thẳng URL cart.html (dùng cho case mở lại giỏ hàng trong browser mới)
+    public void goToCartPageByUrl() {
+        navigateToUrl(ConfigReader.get("baseUrl") + "cart.html");
     }
 
     // Playwright chỉ tự nhận XPath khi chuỗi bắt đầu bằng // -> XPath tương đối .// phải thêm tiền tố "xpath="
