@@ -3,6 +3,7 @@ package tests.menu;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import pages.HeaderComponent;
 import pages.InventoryPage;
@@ -15,6 +16,9 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+// Bug đã biết của site (JIRA SDM-10): sau Reset App State các nút vẫn là [Remove].
+// Giữ expected đúng nhưng cách ly khỏi RegressionSuite, chạy riêng trong KnownBugSuite. Bỏ tag khi site sửa bug.
+@Tag("known-bug")
 @DisplayName("TC_MENU_05: [Reset App State] clears the cart and resets state")
 public class TC_MENU_05 extends BaseTest {
     static LoginPage loginPage;
