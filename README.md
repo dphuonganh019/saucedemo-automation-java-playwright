@@ -75,11 +75,11 @@ Each `TC_*` class gets its own isolated `ThreadLocal` browser and page from `Bas
 
 **Prerequisites:** JDK 21, Maven.
 
-1. Clone the repo and install dependencies:
+1. Clone the repo and install dependencies (tests are skipped here because they need the config file from step 3):
    ```bash
    git clone https://github.com/dphuonganh019/saucedemo-automation-java-playwright.git
    cd saucedemo-automation-java-playwright
-   mvn install
+   mvn install -DskipTests
    ```
 2. Install the Playwright browsers:
    ```bash
@@ -97,7 +97,13 @@ Each `TC_*` class gets its own isolated `ThreadLocal` browser and page from `Bas
 mvn test
 ```
 
-`mvn test` runs `RegressionSuite` (every module in parallel), `UserJourneySuite` (the sequential flow) and `KnownBugSuite` (test cases that catch a known defect, see [Known issue](#known-issue)). To run a single suite, pass its name:
+`mvn test` runs `RegressionSuite` (every module in parallel), `UserJourneySuite` (the sequential flow) and `KnownBugSuite` (test cases that catch a known defect, see [Known issue](#known-issue)). It ends with **BUILD FAILURE** because of the 2 known-bug tests, not because of the framework. For a green run, which is what CI checks:
+
+```bash
+mvn test -Dtest=RegressionSuite,UserJourneySuite
+```
+
+To run a single suite, pass its name:
 
 ```bash
 mvn test -Dtest=LoginSuite
