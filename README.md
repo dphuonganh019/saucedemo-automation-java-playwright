@@ -20,6 +20,8 @@ A UI test automation framework built from scratch for [saucedemo.com](https://ww
 
 58 manual test cases are automated, one Java class per test case. Each step of the manual test case is one ordered `@Test` method, so the report reads like the original test case.
 
+The manual test cases are in the [SauceDemo_Manual_TestCases](https://docs.google.com/spreadsheets/d/1hVC1AL-kN1Oc-Vr0-2_GzGlgoYPDtk0xGzFOA-pcxRc/edit) sheet: one row per step with its expected result, the latest status and a link to the automated class.
+
 | Module         | Package               | Test cases               | Suite                |
 |----------------|-----------------------|--------------------------|----------------------|
 | Login          | `tests.login`         | `TC_LOGIN_01` - `TC_LOGIN_06` | `LoginSuite`         |
