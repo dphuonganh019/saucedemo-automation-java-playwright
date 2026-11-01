@@ -4,6 +4,8 @@
 
 A UI test automation framework built from scratch for [saucedemo.com](https://www.saucedemo.com/). It covers every module of the site (login, menu, inventory, product detail, cart, checkout, end-to-end flows) with a Page Object Model design, parallel and sequential execution modes, step-by-step HTML reporting, and AI-assisted JIRA bug filing in CI. Built as a capstone project to practice designing an automation framework end-to-end rather than just writing individual test scripts.
 
+**Demo video:** [MenuSuite run, ExtentReports report and AI bug reporting dry run](https://youtu.be/-Bu4YNOqy80) (2.5 minutes, Vietnamese captions).
+
 ## Tech stack
 
 | Purpose              | Tool                               |
