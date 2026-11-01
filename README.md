@@ -129,7 +129,7 @@ Each run generates an ExtentReports HTML report under `test-output/`: one node p
 
 ## Known issue
 
-`TC_MENU_05` and `TC_E2E_05` fail on purpose: they expose a real defect of saucedemo.com, tracked in JIRA as SDM-10. After **Reset App State**, the cart badge is cleared but the product buttons keep showing **Remove** instead of **Add to cart**. The tests keep the correct expected result so the defect stays visible.
+`TC_MENU_05` and `TC_E2E_05` fail because they catch a real defect of saucedemo.com, tracked in JIRA as SDM-10. The tests themselves are correct. After **Reset App State**, the cart badge is cleared but the product buttons keep showing **Remove** instead of **Add to cart**. The tests keep the correct expected result so the defect stays visible.
 
 Both classes are tagged `@Tag("known-bug")` and quarantined:
 
